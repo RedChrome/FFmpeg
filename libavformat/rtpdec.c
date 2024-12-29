@@ -671,15 +671,15 @@ static void finalize_packet(RTPDemuxContext *s, AVPacket *pkt, uint32_t timestam
 
     /* export private data (timestamps) into side data */
     if (s->last_rtcp_ntp_time != AV_NOPTS_VALUE && s->last_rtcp_timestamp) {
-		side_data->last_rtcp_ntp_time =  s->last_rtcp_ntp_time;
-		side_data->last_rtcp_timestamp = s->last_rtcp_timestamp;
-		side_data->first_rtcp_ntp_time = s->first_rtcp_ntp_time;
-		side_data->synced = true;
+        side_data->last_rtcp_ntp_time =  s->last_rtcp_ntp_time;
+        side_data->last_rtcp_timestamp = s->last_rtcp_timestamp;
+        side_data->first_rtcp_ntp_time = s->first_rtcp_ntp_time;
+        side_data->synced = true;
     } else {
         side_data->last_rtcp_ntp_time = 0;
         side_data->last_rtcp_timestamp = 0;
-		side_data->first_rtcp_ntp_time = 0;
-		side_data->synced = false;
+        side_data->first_rtcp_ntp_time = 0;
+        side_data->synced = false;
     }
 
     side_data->seq = s->seq;
