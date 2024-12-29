@@ -21,6 +21,7 @@
 #ifndef AVCODEC_PACKET_H
 #define AVCODEC_PACKET_H
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -392,6 +393,19 @@ typedef struct AVPacketSideData {
     size_t   size;
     enum AVPacketSideDataType type;
 } AVPacketSideData;
+
+/**
+ * This structure represent the rtcp sender report data
+ * needed to syncronize the stream data with wall clock.
+ */
+typedef struct RTPTime {
+    uint32_t timestamp;
+    uint64_t last_rtcp_ntp_time;
+    uint64_t first_rtcp_ntp_time;
+    uint32_t last_rtcp_timestamp;
+    uint16_t seq;
+    bool synced;
+} RTPTime;
 
 /**
  * Allocate a new packet side data.

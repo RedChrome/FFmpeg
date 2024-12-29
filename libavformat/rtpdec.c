@@ -667,6 +667,26 @@ static void finalize_packet(RTPDemuxContext *s, AVPacket *pkt, uint32_t timestam
         }
     }
 
+    RTPTime * side_data = (RTPTime *) av_malloc(sizeof(RTPTime));
+
+    /* export private data (timestamps) into side data */
+    if (s->last_rtcp_ntp_time != AV_NOPTS_VALUE && s->last_rtcp_timestamp) {
+		side_data->last_rtcp_ntp_time =  s->last_rtcp_ntp_time;
+		side_data->last_rtcp_timestamp = s->last_rtcp_timestamp;
+		side_data->first_rtcp_ntp_time = s->first_rtcp_ntp_time;
+		side_data->synced = true;
+    } else {
+        side_data->last_rtcp_ntp_time = 0;
+        side_data->last_rtcp_timestamp = 0;
+		side_data->first_rtcp_ntp_time = 0;
+		side_data->synced = false;
+    }
+
+    side_data->seq = s->seq;
+    side_data->timestamp = s->timestamp;
+    av_packet_add_side_data(pkt, AV_PKT_DATA_METADATA_UPDATE, (void *) side_data, sizeof(RTPTime));
+    
+
     if (s->last_rtcp_ntp_time != AV_NOPTS_VALUE && s->ic->nb_streams > 1) {
         int64_t addend;
         int delta_timestamp;
